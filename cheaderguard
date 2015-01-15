@@ -4,16 +4,18 @@ from sys import argv
 from os.path import basename
 from uuid import uuid4
 
-assert len(argv) == 2
-filename = basename(argv[1])
-var = filename.upper().replace(".","_")
-var += "_" + str(uuid4()).upper().replace("-","_")
+assert len(argv) > 1
 
-with open(argv[1]) as f:
-    contents = f.read()
+for arg in argv[1:]:
+    filename = basename(arg)
+    var = filename.upper().replace(".","_")
+    var += "_" + str(uuid4()).upper().replace("-","_")
 
-with open(argv[1],"w") as f:
-    f.write("#ifndef {}\n".format(var))
-    f.write("#define {}\n\n".format(var))
-    f.write(contents)
-    f.write("\n#endif")
+    with open(arg) as f:
+        contents = f.read()
+
+    with open(arg,"w") as f:
+        f.write("#ifndef {}\n".format(var))
+        f.write("#define {}\n\n".format(var))
+        f.write(contents)
+        f.write("\n#endif")
